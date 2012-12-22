@@ -1,26 +1,26 @@
 #!/usr/bin/env ruby
-# vim: set syntax=ruby
-# Hung Dao
 
 
-checks = []
-# Rails
-checks << "Rails.logger"
-# Javascript
-checks << "console.log"
-
-check_count = checks.size
+checks = %w{
+  debugger
+  Rails.logger
+  logger
+  puts
+  save_and_open_page
+  console.log
+}
 
 errors = []
 
 files_changed = `git diff --name-only HEAD`
 files_changed.each_line do |filename|
   filename.chomp!
-  file = open(filename)
   puts "Checking #{filename}: "
+  changes = `git diff -U0 HEAD -- #{filename}`
   checks.each do |check|
-    unless file.grep(/#{check}/).empty?
-      errors << {:name => check, :file => filename}
+    result = changes.split(/\n/).grep(/^\+.*\b#{check}/)
+    unless result.empty?
+      errors << {:name => check, :file => filename, :matches => result}
     end
   end
 end
@@ -28,6 +28,8 @@ end
 unless errors.empty?
   errors.each do |error|
     puts "'#{error[:name]}' found in file: #{error[:file]}"
+    error[:matches].each {|m| puts "  -> #{m}" }
   end
+  puts "COMMIT REJECTED. Please remove them before commiting OR use --no-verify"
   exit 1
 end
