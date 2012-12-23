@@ -27,7 +27,6 @@ errors = []
 files_changed = `git diff --name-only HEAD`
 files_changed.each_line do |filename|
   filename.chomp!
-  puts "Checking #{filename}: "
   changes = `git diff -U0 HEAD -- #{filename}`
   checks.each do |check|
     result = changes.split(/\n/).grep(/^\+.*\b#{check}/)
