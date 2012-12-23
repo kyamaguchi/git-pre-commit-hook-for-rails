@@ -15,7 +15,6 @@ end
 
 checks = %w{
   debugger
-  Rails.logger
   logger
   puts
   save_and_open_page

@@ -6,7 +6,6 @@ It checks only + lines.
 Current keywords:
 
     debugger
-    Rails.logger
     logger
     puts
     save_and_open_page
