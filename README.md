@@ -8,6 +8,7 @@ Current keywords:
     debugger
     logger
     puts
+    binding.pry
     save_and_open_page
     console.log
 
